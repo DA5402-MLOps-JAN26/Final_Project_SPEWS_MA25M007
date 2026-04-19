@@ -1,0 +1,4 @@
+#  params.yaml
+week_num: 8
+model_name: student_dropout_best
+mlflow_uri: http://127.0.0.1:5000

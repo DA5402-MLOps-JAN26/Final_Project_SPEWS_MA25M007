@@ -1,0 +1,87 @@
+schema: '2.0'
+stages:
+  preprocess:
+    cmd: python notebooks/eda_part1.py && python notebooks/eda_part2.py
+    deps:
+    - path: data/raw/studentAssessment.csv
+      hash: md5
+      md5: 9ceb38acaeb26fbc15c98b563290c1db
+      size: 5690310
+    - path: data/raw/studentInfo.csv
+      hash: md5
+      md5: ead11d001fe8b7aed1469daa643a812c
+      size: 3461652
+    - path: data/raw/studentVle.csv
+      hash: md5
+      md5: b8aae6f4ffd1523319aeb56d66b17f72
+      size: 453836331
+    - path: notebooks/eda_part1.py
+      hash: md5
+      md5: b02b313944c53fb6df00ef2e32089938
+      size: 673
+    - path: notebooks/eda_part2.py
+      hash: md5
+      md5: 752a1487a21cdc1cb14ae528670a69bc
+      size: 2696
+    outs:
+    - path: data/processed/baseline_stats.json
+      hash: md5
+      md5: 316dbace59f919a3e0ae1cba3bd39ce1
+      size: 381
+    - path: data/processed/student_labels.csv
+      hash: md5
+      md5: f3785314cf4b80701326388d6140e4d6
+      size: 127990
+  build_features:
+    cmd: python scripts/build_features.py
+    deps:
+    - path: data/features.py
+      hash: md5
+      md5: 860721a05829dc69f0a145f26f27ad4b
+      size: 6173
+    - path: data/processed/student_labels.csv
+      hash: md5
+      md5: f3785314cf4b80701326388d6140e4d6
+      size: 127990
+    - path: data/raw/studentInfo.csv
+      hash: md5
+      md5: ead11d001fe8b7aed1469daa643a812c
+      size: 3461652
+    - path: scripts/build_features.py
+      hash: md5
+      md5: 83e1cf3445ff4a1436795b04979f44c2
+      size: 1102
+    outs:
+    - path: data/features/features_week_8.csv
+      hash: md5
+      md5: 872483ca6db16e6f4668fa7839479dfa
+      size: 1344086
+  register:
+    cmd: python scripts/register_best_model.py
+    deps:
+    - path: models/trainer.py
+      hash: md5
+      md5: 5b0808c63e83b90cca09bf9e89e12ace
+      size: 5829
+    - path: scripts/register_best_model.py
+      hash: md5
+      md5: 91a3f6d44cc0a67a5e6b6b049ce97d84
+      size: 1687
+  train:
+    cmd: python scripts/run_training.py
+    deps:
+    - path: data/features/features_week_8.csv
+      hash: md5
+      md5: 872483ca6db16e6f4668fa7839479dfa
+      size: 1344086
+    - path: models/trainer.py
+      hash: md5
+      md5: 5b0808c63e83b90cca09bf9e89e12ace
+      size: 5829
+    - path: scripts/run_training.py
+      hash: md5
+      md5: 06f403d26e39907b84350afda5f2e14c
+      size: 2331
+    params:
+      params.yaml:
+        week_num: 8

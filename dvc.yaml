@@ -1,0 +1,38 @@
+stages:
+  preprocess:
+    cmd: python notebooks/eda_part1.py && python notebooks/eda_part2.py
+    deps:
+      - notebooks/eda_part1.py
+      - notebooks/eda_part2.py
+      - data/raw/studentInfo.csv
+      - data/raw/studentVle.csv
+      - data/raw/studentAssessment.csv
+    outs:
+      - data/processed/student_labels.csv
+      - data/processed/baseline_stats.json
+
+  build_features:
+    cmd: python scripts/build_features.py
+    deps:
+      - scripts/build_features.py
+      - data/features.py
+      - data/processed/student_labels.csv
+      - data/raw/studentInfo.csv
+    outs:
+      - data/features/features_week_8.csv
+
+  train:
+    cmd: python scripts/run_training.py
+    deps:
+      - models/trainer.py
+      - scripts/run_training.py
+      - data/features/features_week_8.csv
+    params:
+      - params.yaml:
+          - week_num
+
+  register:
+    cmd: python scripts/register_best_model.py
+    deps:
+      - scripts/register_best_model.py
+      - models/trainer.py
