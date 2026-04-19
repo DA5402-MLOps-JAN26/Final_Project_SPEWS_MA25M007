@@ -1,0 +1,16 @@
+name: student_dropout_risk
+
+# Use a conda environment for reproducibility
+conda_env: conda.yaml
+
+entry_points:
+  main:
+    parameters:
+      week_num:
+        type: int
+        default: 4
+      train_xgb:
+        type: int
+        default: 0
+    command: |
+      python scripts/run_training.py --week {week_num} --train-xgb {train_xgb}
