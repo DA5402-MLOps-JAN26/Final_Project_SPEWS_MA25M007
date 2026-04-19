@@ -36,3 +36,16 @@ stages:
     deps:
       - scripts/register_best_model.py
       - models/trainer.py
+  retrain_robust:
+    cmd: python scripts/retrain_robust.py
+    deps:
+      - scripts/retrain_robust.py
+      - data/features/features_week_4.csv
+      - data/features/features_week_5.csv
+      - data/features/features_week_6.csv
+      - data/features/features_week_7.csv
+      - data/features/features_week_8.csv
+      - data/features/features_week_9.csv
+      - data/features/features_week_10.csv
+    outs:
+      - models/registry/   # symbolic, but indicates a new model is produced

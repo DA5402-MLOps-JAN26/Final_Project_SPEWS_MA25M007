@@ -1,0 +1,105 @@
+#  docker-compose.yml 
+version: '3.8'
+
+services:
+  mlflow-server:
+    image: ghcr.io/mlflow/mlflow:v3.11.1
+    container_name: mlflow-server
+    ports: ["5001:5000"]
+    command: >
+      mlflow ui --host 0.0.0.0 --port 5000
+      --backend-store-uri sqlite:///mlflow/mlflow.db
+      --default-artifact-root /mlflow/artifacts
+    volumes:
+      - mlflow_data:/mlflow
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:5000')\""]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - spews
+
+  inference-api:
+    build: .
+    container_name: inference-api
+    ports: ["8002:8000"]
+    environment:
+      - MLFLOW_TRACKING_URI=http://mlflow-server:5000
+      - MODEL_NAME=student_dropout_best
+      - MODEL_ALIAS=production
+    depends_on:
+      mlflow-server:
+        condition: service_healthy
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+    networks:
+      - spews
+
+  student-ui:
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    container_name: student-ui
+    ports: ["3002:3000"]
+    environment:
+      - API_BASE_URL=http://inference-api:8000
+    depends_on:
+      - inference-api
+    networks:
+      - spews
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports: ["9090:9090"]
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - spews
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports: ["3001:3000"]
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    networks:
+      - spews
+
+  airflow:
+    image: apache/airflow:2.8.0
+    container_name: airflow
+    ports: ["8080:8080"]
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=sqlite:////opt/airflow/airflow.db
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./data:/opt/airflow/data
+    command: >
+      bash -c "
+      airflow db init ;
+      airflow users create --username admin --password admin --firstname Admin --lastname User --role Admin --email admin@spews.com 2>/dev/null ;
+      airflow webserver -p 8080 &
+      airflow scheduler &
+      tail -f /dev/null
+      "
+    networks:
+      - spews
+
+volumes:
+  mlflow_data:
+  grafana_data:
+  airflow_logs:
+
+networks:
+  spews:
+    driver: bridge
