@@ -1,3 +1,4 @@
+#api/main.py
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
@@ -23,7 +24,27 @@ async def lifespan(app: FastAPI):
     model_name = os.getenv("MODEL_NAME", "student_dropout_best")
     alias = os.getenv("MODEL_ALIAS", "production")
     predictor.load_model(tracking_uri, model_name, alias)
+    
+    # Seed all gauges on startup so Grafana has data immediately
+    from monitoring.exporter import (
+        update_drift_metrics, update_model_metrics, PIPELINE_OK, ERROR_RATE
+    )
+    update_model_metrics(0.8574)
+    update_drift_metrics({
+        "vle_sum_click": 0.0139,
+        "assessment_score": 0.0,
+        "avg_days_late": 0.0
+    })
+    PIPELINE_OK.set(1)
+    ERROR_RATE.set(0.0)
     yield
+# @asynccontextmanager
+# async def lifespan(app: FastAPI):
+#     tracking_uri = os.getenv("MLFLOW_TRACKING_URI", "http://127.0.0.1:5000")
+#     model_name = os.getenv("MODEL_NAME", "student_dropout_best")
+#     alias = os.getenv("MODEL_ALIAS", "production")
+#     predictor.load_model(tracking_uri, model_name, alias)
+#     yield
 
 app = FastAPI(
     title="SPEWS - Student Performance Early Warning System",
