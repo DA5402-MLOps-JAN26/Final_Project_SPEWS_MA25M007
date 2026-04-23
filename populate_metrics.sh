@@ -1,13 +1,16 @@
 #!/bin/bash
-# Ultimate script to populate all SPEWS metrics for Grafana
+# Populate SPEWS metrics for Grafana
+# Usage: ./populate_metrics.sh [NUMBER_OF_REQUESTS] (default: 20)
 set -e
+
+REQUESTS=${1:-20}   # first argument or default 20
 
 echo "=== 1. Ensure all containers are up ==="
 docker-compose up -d
 sleep 10
 
-echo "=== 2. Generate prediction traffic (20 requests) ==="
-for i in $(seq 1 20); do
+echo "=== 2. Generate $REQUESTS prediction request(s) ==="
+for i in $(seq 1 "$REQUESTS"); do
   curl -s -X POST http://localhost:8002/predict -H "Content-Type: application/json" -d '{
     "student": {
       "id_student": 12345,
@@ -27,7 +30,7 @@ for i in $(seq 1 20); do
     }
   }' > /dev/null
 done
-echo "20 predictions sent."
+echo "$REQUESTS predictions sent."
 
 echo "=== 3. Set gauge metrics inside inference-api ==="
 docker exec inference-api python -c "

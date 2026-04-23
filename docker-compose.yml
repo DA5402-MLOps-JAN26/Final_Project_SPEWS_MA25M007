@@ -65,6 +65,7 @@ services:
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
     volumes:
+      - grafana_data:/var/lib/grafana 
       - ./monitoring/grafana_dashboard.json:/etc/grafana/provisioning/dashboards/spews.json
       - ./monitoring/grafana_datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
       - ./monitoring/grafana_dashboard_provider.yml:/etc/grafana/provisioning/dashboards/provider.yml
