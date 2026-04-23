@@ -8,7 +8,7 @@ import numpy as np
 import json
 import os
 import sys
-
+from prometheus_client import CollectorRegistry, Gauge, push_to_gateway
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 default_args = {
@@ -78,6 +78,18 @@ def log_pipeline_metrics(**context):
     with open('data/processed/pipeline_metrics.json', 'w') as f:
         json.dump(metrics, f, indent=2)
     print(f"Pipeline metrics logged: {metrics}")
+    psi = context['task_instance'].xcom_pull(task_ids='compute_drift', key='psi_score') or 0.0
+    # Update Prometheus metrics via Pushgateway
+    registry = CollectorRegistry()
+    pipeline_success = Gauge('spews_pipeline_success', 'Last Airflow run success', registry=registry)
+    pipeline_success.set(1)  # Task only runs on success path
+    psi_gauge = Gauge('spews_drift_psi_score', 'PSI drift score', ['feature'], registry=registry)
+    psi_gauge.labels(feature='sum_click').set(psi)
+    try:
+        push_to_gateway('pushgateway:9091', job='airflow_pipeline', registry=registry)
+        print("Metrics pushed to Pushgateway")
+    except Exception as e:
+        print(f"Failed to push metrics: {e}")
 
 with DAG(
     'student_weekly_pipeline',

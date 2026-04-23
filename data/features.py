@@ -57,7 +57,7 @@ def compute_assessment_features(assess_df: pd.DataFrame, assess_meta: pd.DataFra
             return 0.0
         return np.average(scores, weights=weights)
 
-    avg_score = merged.groupby('id_student').apply(weighted_avg).reset_index()
+    avg_score = merged.groupby('id_student').apply(weighted_avg, include_groups=False).reset_index()
     avg_score.columns = ['id_student', 'avg_weighted_score']
 
     # Number of missed assessments (no submission recorded)

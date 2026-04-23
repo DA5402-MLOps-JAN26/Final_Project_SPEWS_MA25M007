@@ -126,7 +126,7 @@ elif page == "ML Pipeline Console":
             st.warning("Retrain triggered - monitor MLflow UI")
     with c2:
         st.subheader("MLflow Experiments")
-        st.link_button("Open MLflow", "http://localhost:5000")
+        st.link_button("Open MLflow", "http://localhost:5001")
         st.subheader("Airflow Pipeline")
         st.link_button("Open Airflow", "http://localhost:8080")
 

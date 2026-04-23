@@ -11,6 +11,7 @@ COPY api/ ./api/
 COPY models/ ./models/
 COPY data/ ./data/
 COPY monitoring/ ./monitoring/
+COPY models/production_model.pkl /app/models/production_model.pkl
 
 EXPOSE 8000
 
