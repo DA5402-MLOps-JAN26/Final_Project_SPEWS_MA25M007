@@ -9,11 +9,22 @@ Open your web browser and go to:
 - **Docker Deployment:** `http://localhost:3002`
 
 ## Navigating the Dashboard
-Use the sidebar on the left to switch between four screens.
+Use the sidebar on the left to switch between five screens.
 
 ---
 
-### 1. Student Risk Dashboard
+### 1. Home & Help
+**Purpose:** Understand the SPEWS system and how to use it.
+
+**What you see:**
+- A brief description of the project and its goals.
+- A risk‑level legend explaining the meaning of **Low** (green), **Medium** (amber), and **High** (red) risk scores.
+- A summary of the data the model uses for predictions.
+- Links to other resources.
+
+---
+
+### 2. Student Risk Dashboard
 **Purpose:** Get a real‑time risk prediction for an individual student.
 
 **How to use:**
@@ -38,7 +49,7 @@ Use the sidebar on the left to switch between four screens.
 
 ---
 
-### 2. Cohort Overview
+### 3. Cohort Overview
 **Purpose:** View and filter a list of students with their predicted risk levels.
 
 **How to use:**
@@ -48,7 +59,7 @@ Use the sidebar on the left to switch between four screens.
 
 ---
 
-### 3. ML Pipeline Console
+### 4. ML Pipeline Console
 **Purpose:** Monitor the health of the ML pipeline and access supporting tools.
 
 **What you see:**
@@ -60,7 +71,7 @@ Use the sidebar on the left to switch between four screens.
 
 ---
 
-### 4. Monitoring Dashboard
+### 5. Monitoring Dashboard
 **Purpose:** View real‑time system metrics and alerts.
 
 **What you see:**
@@ -71,8 +82,6 @@ Use the sidebar on the left to switch between four screens.
 - **Open Grafana:** Launches a detailed monitoring dashboard with live charts.
 - **Prometheus Metrics:** Raw metrics for advanced users.
 
----
-
 ## Troubleshooting
 | Issue | Solution |
 |-------|----------|
@@ -82,6 +91,3 @@ Use the sidebar on the left to switch between four screens.
 | Cannot connect to MLflow/Airflow | Make sure Docker services are up (`docker-compose ps`). |
 
 ---
-
-## Support
-For technical issues, contact the MLOps team or refer to the project documentation in the `docs/` folder.

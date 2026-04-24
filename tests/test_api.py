@@ -70,3 +70,10 @@ def test_metrics():
 def test_metrics_content():
     r = client.get("/metrics")
     assert "spews_api_requests_total" in r.text or "python_info" in r.text
+
+def test_lifespan_seeding():
+    # Ensure the app starts and seeds gauges without errors
+    from api.main import app, lifespan
+    with TestClient(app) as client:
+        response = client.get("/health")
+        assert response.status_code == 200

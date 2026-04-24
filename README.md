@@ -4,8 +4,8 @@
 [![MLOps](https://img.shields.io/badge/MLOps-Complete-blue)](https://github.com/DA5402-MLOps-JAN26/Final_Project_SPEWS_MA25M007)
 [![Python 3.10](https://img.shields.io/badge/Python-3.10-green)](https://www.python.org/)
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue)](https://www.docker.com/)
-[![Tests](https://img.shields.io/badge/Tests-21%20passed-success)](https://github.com/DA5402-MLOps-JAN26/Final_Project_SPEWS_MA25M007/actions)
-[![Coverage](https://img.shields.io/badge/Coverage-87%25-brightgreen)](https://github.com/DA5402-MLOps-JAN26/Final_Project_SPEWS_MA25M007)
+[![Tests](https://img.shields.io/badge/Tests-22%20passed-success)](https://github.com/DA5402-MLOps-JAN26/Final_Project_SPEWS_MA25M007/actions)
+[![Coverage](https://img.shields.io/badge/Coverage-88%25-brightgreen)](https://github.com/DA5402-MLOps-JAN26/Final_Project_SPEWS_MA25M007)
 
 A complete end-to-end MLOps pipeline that predicts student dropout risk weekly using the Open University Learning Analytics Dataset (OULAD).
 
@@ -54,10 +54,10 @@ This project was developed as part of the **DA5402 – Machine Learning Operatio
 - ✅ **Automated weekly pipeline** – Airflow DAG ingests new data, validates schema, detects drift, and triggers retraining.
 - ✅ **Experiment tracking** – MLflow logs all hyperparameters, metrics, and artifacts. The best model is registered and aliased `@production`.
 - ✅ **Real‑time inference** – FastAPI serves predictions via REST endpoints with health/readiness probes.
-- ✅ **Interactive dashboard** – Streamlit provides four screens for individual risk assessment, cohort overview, pipeline console, and monitoring.
+- ✅ **Interactive dashboard** – Streamlit provides five screens for individual risk assessment, cohort overview, pipeline console, and monitoring.
 - ✅ **Comprehensive monitoring** – Prometheus scrapes metrics (request count, latency, risk distribution, PSI score). Grafana displays live dashboards.
 - ✅ **Reproducible environments** – Conda environment and Docker images guarantee consistent behaviour across development and deployment.
-- ✅ **Extensive testing** – 21 unit tests with 87% code coverage.
+- ✅ **Extensive testing** – 22 unit tests with 88% code coverage.
 
 ---
 
@@ -203,11 +203,13 @@ Prometheus: http://localhost:9090
 
 Usage
 Streamlit Dashboard
-Screen	Description
-Student Risk Dashboard	Enter student metrics (clicks, scores, missed assessments) and get a real‑time risk prediction.
-Cohort Overview	View and filter a simulated cohort. Export risk reports as CSV.
-ML Pipeline Console	Monitor API status, view current model version, and trigger manual retraining.
-Monitoring Dashboard	Live system metrics (error rate, PSI score) and links to Grafana.
+Screen                     | Description
+--------------------------|-------------
+Home & Help               | Introduction to SPEWS, risk level legend, and data explanation
+Student Risk Dashboard    | Enter student metrics (clicks, scores, missed assessments) and get a real‑time risk prediction.
+Cohort Overview           | View and filter a simulated cohort. Export risk reports as CSV.
+ML Pipeline Console       | Monitor API status, view current model version, and trigger manual retraining.
+Monitoring Dashboard      | Live system metrics (error rate, PSI score) and links to Grafana.
 API Endpoints
 Method	Endpoint	Description
 GET	/health	Health check
@@ -261,7 +263,7 @@ Run the test suite with coverage:
 
 bash
 pytest tests/ -v --cov=. --cov-report=term-missing
-Current results: 21 tests passed, 87% overall coverage.
+Current results: 22 tests passed, 88% overall coverage.
 
 Documentation
 Document	Description

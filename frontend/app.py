@@ -246,7 +246,7 @@ elif page == "Monitoring Dashboard":
     col3.metric("Error Rate", "0.0%", help="Percentage of failed prediction requests.")
     st.subheader("Grafana Dashboards")
     st.link_button("Open Grafana", "http://localhost:3001")
-    st.caption("Live charts: request rate, latency, risk distribution, and more. Login: admin / admin.")
+    st.caption("Live charts: request rate, F1 Score and more. Login: admin / admin.")
     st.subheader("Prometheus Metrics")
     st.caption("Raw metrics collected from the inference service.")
     try:
