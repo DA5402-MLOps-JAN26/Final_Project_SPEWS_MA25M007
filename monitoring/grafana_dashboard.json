@@ -243,7 +243,7 @@
                       "datasource": "Prometheus",
                       "spec": {
                         "editorMode": "code",
-                        "expr": "spews_drift_psi_score",
+                        "expr": "spews_drift_psi_score{feature=\"vle_sum_click\"}",
                         "legendFormat": "__auto",
                         "range": true
                       }
