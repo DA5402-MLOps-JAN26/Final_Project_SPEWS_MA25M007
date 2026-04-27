@@ -182,7 +182,7 @@ Start Streamlit
 bash
 export API_BASE_URL=http://localhost:8001
 cd frontend && streamlit run app.py --server.port 8501
-Docker Deployment
+2. **Docker Deployment**
 The entire stack can be started with a single command:
 
 bash
@@ -236,62 +236,65 @@ curl -X POST http://localhost:8002/predict \
       "missed_assessments": 1
     }
   }'
-  
-Airflow Pipeline
-The DAG student_weekly_pipeline runs weekly. It:
+```
+3. **Airflow Pipeline**
 
-Ingests and validates VLE data.
+- The DAG student_weekly_pipeline runs weekly. It:
 
-Cleans outliers.
+- Ingests and validates VLE data.
 
-Computes PSI drift score against baseline statistics.
+- Cleans outliers.
 
-Branches to retraining if PSI > 0.2.
+- Computes PSI drift score against baseline statistics.
 
-Logs metrics to Pushgateway.
+- Branches to retraining if PSI > 0.2.
+
+- Logs metrics to Pushgateway.
 
 Manually trigger with config:
 
 json
 {"week_num": 8}
-Monitoring
-Prometheus scrapes /metrics from the API and Pushgateway.
 
-Grafana dashboard (SPEWS Monitoring) displays:
+4. **Monitoring**
 
-API request rate & latency percentiles
+- Prometheus scrapes /metrics from the API and Pushgateway.
 
-Prediction risk distribution
+- Grafana dashboard (SPEWS Monitoring) displays:
 
-Model F1 score
+- API request rate & latency percentiles
 
-Pipeline success status
+- Prediction risk distribution
 
-Data drift PSI score
+- Model F1 score
 
-API error rate
+- Pipeline success status
 
-Testing
+- Data drift PSI score
+
+- API error rate
+
+5. **Testing**
 Run the test suite with coverage:
-
-bash
+```bash
 pytest tests/ -v --cov=. --cov-report=term-missing
 Current results: 22 tests passed, 88% overall coverage.
+```
+6. **Documentation**
+|Document |	Description |
+|--------|--------------------|
+|docs/HLD.md|	High‑Level Design – architecture, technology choices|
+|docs/LLD.md|	Low‑Level Design – API endpoint specifications and I/O schemas|
+|docs/test_plan.md|	Test strategy, cases, and acceptance criteria|
+|docs/test_report.md|	Test execution summary and coverage report|
+|docs/user_manual.md|	Step‑by‑step guide for non‑technical users|
 
-Documentation
-Document	Description
-docs/HLD.md	High‑Level Design – architecture, technology choices
-docs/LLD.md	Low‑Level Design – API endpoint specifications and I/O schemas
-docs/test_plan.md	Test strategy, cases, and acceptance criteria
-docs/test_report.md	Test execution summary and coverage report
-docs/user_manual.md	Step‑by‑step guide for non‑technical users
-Contributors
+**Contributor**
 Aswini VJ (MA25M007) – DA5402 MLOps Lab, IIT Madras
 
-License
+**License**
 This project is submitted as part of academic coursework and is not intended for production use without further security and scalability hardening.
 
 Git Tags: v0.1-foundation → v0.2-ml-pipeline → v0.3-serving → v1.0-submission
 Final Submission: April 2026
 
-text
