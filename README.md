@@ -81,56 +81,66 @@ This project was developed as part of the **DA5402 – Machine Learning Operatio
 ## Project Structure
 
 Final_Project_SPEWS_MA25M007/
-├── MLproject # MLflow project definition
-├── README.md # This file
-├── conda.yaml # Conda environment specification
-├── docker-compose.yml # Multi‑service Docker orchestration
-├── dvc.lock # DVC pipeline lock file
-├── dvc.yaml # DVC pipeline stages
-├── params.yaml # DVC parameters
-├── requirements.txt # Python dependencies
-├── Dockerfile # Backend API Docker image
-├── api/ # FastAPI application
-│ ├── init.py
-│ ├── main.py # Endpoint definitions
-│ ├── predictor.py # Model loading & inference
-│ └── schemas.py # Pydantic models
-├── dags/ # Airflow DAGs
-│ └── student_pipeline.py # Weekly drift/retrain pipeline
-├── data/ # Data and feature engineering
-│ ├── features.py # Feature engineering functions
-│ └── features/ # Feature matrices (tracked by DVC)
-├── docs/ # Documentation
-│ ├── HLD.md # High‑Level Design
-│ ├── LLD.md # Low‑Level Design
-│ ├── test_plan.md # Test plan
-│ ├── test_report.md # Test execution report
-│ └── user_manual.md # End‑user guide
-├── frontend/ # Streamlit UI
-│ ├── Dockerfile
-│ └── app.py # Main Streamlit application
-├── models/ # Model training & retraining
-│ ├── production_model.pkl # Bundled production model (fallback)
-│ ├── retrain.py # Incremental retraining script
-│ └── trainer.py # Model training class
-├── monitoring/ # Prometheus & Grafana
-│ ├── exporter.py # Prometheus metric definitions
-│ ├── grafana_dashboard.json # Pre‑configured dashboard
-│ └── prometheus.yml # Prometheus scrape config
-├── notebooks/ # EDA scripts
-│ ├── eda_part1.py
-│ └── eda_part2.py
-├── scripts/ # Utility scripts
-│ ├── build_features.py
-│ ├── final_check.py
-│ ├── register_best_model.py
-│ ├── retrain_robust.py
-│ └── run_training.py
-└── tests/ # Unit tests
-├── test_api.py
-├── test_features.py
-├── test_monitoring.py
-└── test_predictor.py
+├── MLproject                # MLflow project definition
+├── README.md                # Project documentation
+├── conda.yaml               # Conda environment specification
+├── requirements.txt         # Python dependencies
+├── docker-compose.yml       # Multi-service Docker orchestration
+├── Dockerfile               # Backend API Docker image
+├── dvc.yaml / dvc.lock      # DVC pipeline stages & lock file
+├── params.yaml              # DVC parameters
+│
+├── api/                     # FastAPI application
+│   ├── main.py              # Endpoint definitions
+│   ├── predictor.py         # Model loading & inference
+│   ├── schemas.py           # Pydantic models
+│   └── __init__.py
+│
+├── dags/                    # Airflow DAGs
+│   └── student_pipeline.py  # Weekly drift/retrain pipeline
+│
+├── data/                    # Data & feature engineering
+│   ├── features.py          # Feature engineering functions
+│   └── features/            # Feature matrices (tracked by DVC)
+│
+├── docs/                    # Documentation
+│   ├── HLD.md               # High-Level Design
+│   ├── LLD.md               # Low-Level Design
+│   ├── test_plan.md         # Test strategy
+│   ├── test_report.md       # Test execution summary
+│   └── user_manual.md       # End-user guide
+│
+├── frontend/                # Streamlit UI
+│   ├── app.py               # Main Streamlit application
+│   └── Dockerfile
+│
+├── models/                  # Model training & retraining
+│   ├── trainer.py           # Model training class
+│   ├── retrain.py           # Incremental retraining script
+│   └── production_model.pkl # Bundled production model (fallback)
+│
+├── monitoring/              # Prometheus & Grafana
+│   ├── exporter.py          # Prometheus metric definitions
+│   ├── prometheus.yml       # Prometheus scrape config
+│   └── grafana_dashboard.json # Pre-configured Grafana dashboard
+│
+├── notebooks/               # Exploratory Data Analysis
+│   ├── eda_part1.py
+│   └── eda_part2.py
+│
+├── scripts/                 # Utility scripts
+│   ├── build_features.py
+│   ├── run_training.py
+│   ├── register_best_model.py
+│   ├── retrain_robust.py
+│   └── final_check.py
+│
+└── tests/                   # Unit tests
+    ├── test_api.py
+    ├── test_features.py
+    ├── test_monitoring.py
+    └── test_predictor.py
+
 
 text
 
