@@ -76,7 +76,7 @@ async def model_info():
         version=str(predictor.model_version),
         alias="production",
         run_id=str(predictor.model_run_id),
-        f1_score=None
+        f1_score=getattr(predictor, 'f1', None)
     )
 
 @app.post("/predict", response_model=PredictResponse)

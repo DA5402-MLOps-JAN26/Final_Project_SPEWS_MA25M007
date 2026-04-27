@@ -23,7 +23,7 @@ class Predictor:
         self.model = None
         self.model_version = "unknown"
         self.model_run_id = "unknown"
-
+        self.f1_score = None
     def load_model(self, tracking_uri: str = "http://127.0.0.1:5000",
                    model_name: str = MODEL_NAME,
                    alias: str = ALIAS):
@@ -70,6 +70,7 @@ class Predictor:
             run = client.get_run(version.run_id)
             f1 = run.data.metrics.get('f1_at_risk', 0.0)
             MODEL_F1.set(f1)
+            self.f1 = f1
             print(f"Updated model F1 metric: {f1:.4f}")
         except Exception as e:
             print(f"Could not update model F1 metric: {e}")
