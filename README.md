@@ -81,68 +81,65 @@ This project was developed as part of the **DA5402 – Machine Learning Operatio
 ## Project Structure
 
 Final_Project_SPEWS_MA25M007/
-├── MLproject                # MLflow project definition
-├── README.md                # Project documentation
-├── conda.yaml               # Conda environment specification
-├── requirements.txt         # Python dependencies
-├── docker-compose.yml       # Multi-service Docker orchestration
-├── Dockerfile               # Backend API Docker image
-├── dvc.yaml / dvc.lock      # DVC pipeline stages & lock file
-├── params.yaml              # DVC parameters
+├── MLproject              # MLflow project definition
+├── README.md              # Project documentation
+├── conda.yaml             # Conda environment specification
+├── requirements.txt       # Python dependencies
+├── docker-compose.yml     # Multi-service orchestration
+├── Dockerfile             # Backend API image
+├── dvc.yaml / dvc.lock    # DVC pipeline stages & lock file
+├── params.yaml            # DVC parameters
 │
-├── api/                     # FastAPI application
-│   ├── main.py              # Endpoint definitions
-│   ├── predictor.py         # Model loading & inference
-│   ├── schemas.py           # Pydantic models
+├── api/                   # FastAPI application
+│   ├── main.py            # Endpoint definitions
+│   ├── predictor.py       # Model loading & inference
+│   ├── schemas.py         # Pydantic models
 │   └── __init__.py
 │
-├── dags/                    # Airflow DAGs
-│   └── student_pipeline.py  # Weekly drift/retrain pipeline
+├── dags/                  # Airflow DAGs
+│   └── student_pipeline.py
 │
-├── data/                    # Data & feature engineering
-│   ├── features.py          # Feature engineering functions
-│   └── features/            # Feature matrices (tracked by DVC)
+├── data/                  # Data & feature engineering
+│   ├── features.py
+│   └── features/          # DVC-tracked feature matrices
 │
-├── docs/                    # Documentation
-│   ├── HLD.md               # High-Level Design
-│   ├── LLD.md               # Low-Level Design
-│   ├── test_plan.md         # Test strategy
-│   ├── test_report.md       # Test execution summary
-│   └── user_manual.md       # End-user guide
+├── docs/                  # Documentation
+│   ├── HLD.md             # High-Level Design
+│   ├── LLD.md             # Low-Level Design
+│   ├── test_plan.md
+│   ├── test_report.md
+│   └── user_manual.md
 │
-├── frontend/                # Streamlit UI
-│   ├── app.py               # Main Streamlit application
+├── frontend/              # Streamlit UI
+│   ├── app.py
 │   └── Dockerfile
 │
-├── models/                  # Model training & retraining
-│   ├── trainer.py           # Model training class
-│   ├── retrain.py           # Incremental retraining script
-│   └── production_model.pkl # Bundled production model (fallback)
+├── models/                # Model training & retraining
+│   ├── trainer.py
+│   ├── retrain.py
+│   └── production_model.pkl
 │
-├── monitoring/              # Prometheus & Grafana
-│   ├── exporter.py          # Prometheus metric definitions
-│   ├── prometheus.yml       # Prometheus scrape config
-│   └── grafana_dashboard.json # Pre-configured Grafana dashboard
+├── monitoring/            # Prometheus & Grafana
+│   ├── exporter.py
+│   ├── prometheus.yml
+│   └── grafana_dashboard.json
 │
-├── notebooks/               # Exploratory Data Analysis
+├── notebooks/             # Exploratory Data Analysis
 │   ├── eda_part1.py
 │   └── eda_part2.py
 │
-├── scripts/                 # Utility scripts
+├── scripts/               # Utility scripts
 │   ├── build_features.py
 │   ├── run_training.py
 │   ├── register_best_model.py
 │   ├── retrain_robust.py
 │   └── final_check.py
 │
-└── tests/                   # Unit tests
+└── tests/                 # Unit tests
     ├── test_api.py
     ├── test_features.py
     ├── test_monitoring.py
     └── test_predictor.py
-
-
-text
 
 ---
 
@@ -157,61 +154,60 @@ text
 
 ### Local Development Setup
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/DA5402-MLOps-JAN26/Final_Project_SPEWS_MA25M007.git
-   cd Final_Project_SPEWS_MA25M007
-Create and activate the Conda environment
+# Clone the repository
+git clone https://github.com/DA5402-MLOps-JAN26/Final_Project_SPEWS_MA25M007.git
+cd Final_Project_SPEWS_MA25M007
 
-bash
+# Create and activate Conda environment
 conda create -n spews python=3.10 -y
 conda activate spews
 pip install -r requirements.txt
-Download the OULAD dataset
 
-bash
+# Download the OULAD dataset
 mkdir -p ~/.kaggle
 # Place your kaggle.json in ~/.kaggle/
 cd data/raw
 kaggle datasets download -d anlgrbz/student-demographics-online-education-dataoulad --unzip
 cd ../..
-Pull DVC‑tracked files
 
-bash
+# Pull DVC-tracked files
 dvc pull
-Start MLflow UI
 
-bash
+# Start MLflow UI
 mlflow ui --backend-store-uri file://$(pwd)/mlruns --port 5000
-Start FastAPI
 
-bash
+# Start FastAPI
 uvicorn api.main:app --reload --port 8001
-Start Streamlit
 
-bash
+# Start Streamlit
 export API_BASE_URL=http://localhost:8001
 cd frontend && streamlit run app.py --server.port 8501
+
 Docker Deployment
 The entire stack can be started with a single command:
 
 bash
 docker-compose up --build -d
-After all services are healthy, access:
 
-Streamlit UI: http://localhost:3002
+After all services are healthy.
+Access services:
 
-FastAPI: http://localhost:8002/health
+Streamlit UI → http://localhost:3002
 
-MLflow: http://localhost:5001
+FastAPI → http://localhost:8002/health
 
-Airflow: http://localhost:8080 (admin/admin)
+MLflow → http://localhost:5001
 
-Grafana: http://localhost:3001 (admin/admin)
+Airflow → http://localhost:8080 (admin/admin)
 
-Prometheus: http://localhost:9090
+Grafana → http://localhost:3001 (admin/admin)
+
+Prometheus → http://localhost:9090
 
 Usage
+
+Streamlit Dashboard
+
 | Screen | Description |
 | --- | --- |
 | **Home & Help** | Provides an introduction to SPEWS, explains the purpose of the system, shows the risk level legend (low, medium, high), and offers guidance on how to interpret predictions. |
