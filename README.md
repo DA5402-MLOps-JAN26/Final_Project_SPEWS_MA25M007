@@ -51,7 +51,7 @@ This project was developed as part of the **DA5402 – Machine Learning Operatio
 
 ## Key Features
 
--  **Automated weekly pipeline** – Airflow DAG ingests new data, validates schema, detects drift, and triggers retraining.
+- ✅ **Automated weekly pipeline** – Airflow DAG ingests new data, validates schema, detects drift, and triggers retraining.
 - ✅ **Experiment tracking** – MLflow logs all hyperparameters, metrics, and artifacts. The best model is registered and aliased `@production`.
 - ✅ **Real‑time inference** – FastAPI serves predictions via REST endpoints with health/readiness probes.
 - ✅ **Interactive dashboard** – Streamlit provides five screens for individual risk assessment, cohort overview, pipeline console, and monitoring.
@@ -154,8 +154,8 @@ text
 Create and activate the Conda environment
 
 bash
-conda create -n spews python=3.10 -y
-conda activate spews
+conda create -n <name> python=3.10 -y
+conda activate <name>
 pip install -r requirements.txt
 Download the OULAD dataset
 
@@ -202,37 +202,41 @@ Grafana: http://localhost:3001 (admin/admin)
 Prometheus: http://localhost:9090
 
 Usage
-| Screen | Description |
-| --- | --- |
-| **Home & Help** | Provides an introduction to SPEWS, explains the purpose of the system, shows the risk level legend (low, medium, high), and offers guidance on how to interpret predictions. |
-| **Student Risk Dashboard** | Interactive form where advisors can input student metrics (weekly clicks, assessment scores, missed submissions). The system returns a real‑time dropout risk prediction with confidence scores. |
-| **Cohort Overview** | Displays a simulated cohort of students with sortable and filterable risk levels. Advisors can drill down into individual profiles and export cohort risk reports as CSV for offline analysis. |
-| **ML Pipeline Console** | Shows the current status of the API and ML pipeline. Displays the active model version, retraining history, and allows manual retraining triggers directly from the UI. |
-| **Monitoring Dashboard** | Provides live system metrics such as API request rate, latency, error rate, and PSI drift score. Includes embedded Grafana panels for deeper monitoring insights. |
+Streamlit Dashboard
+Screen                     | Description
+--------------------------|-------------
+Home & Help               | Introduction to SPEWS, risk level legend, and data explanation
+Student Risk Dashboard    | Enter student metrics (clicks, scores, missed assessments) and get a real‑time risk prediction.
+Cohort Overview           | View and filter a simulated cohort. Export risk reports as CSV.
+ML Pipeline Console       | Monitor API status, view current model version, and trigger manual retraining.
+Monitoring Dashboard      | Live system metrics (error rate, PSI score) and links to Grafana.
 
-API Endpoints
-| Method | Endpoint | Description |
-| --- | --- | --- |
-| **GET** | ``/health`` | Basic health check to confirm the API service is running. |
-| **GET** | ``/ready`` | Readiness probe that verifies if the production model is loaded and ready. |
-| **GET** | ``/model/info`` | Returns metadata about the current production model (version, training date, metrics). |
-| **POST** | ``/predict`` | Accepts a single student’s data in JSON format and returns dropout risk prediction. |
-| **POST** | ``/predict/batch`` | Accepts multiple student records in JSON format and returns batch predictions. |
-| **GET** | ``/metrics`` | Exposes Prometheus metrics (request count, latency, risk distribution, PSI score) for monitoring. |
+### API Endpoints
 
-bash
+| Method | Endpoint           | Description                                      |
+|--------|--------------------|--------------------------------------------------|
+| GET    | `/health`          | Health check                                     |
+| GET    | `/ready`           | Readiness probe (model loaded status)            |
+| GET    | `/model/info`      | Metadata about the production model              |
+| POST   | `/predict`         | Single student risk prediction                   |
+| POST   | `/predict/batch`   | Batch prediction for multiple students           |
+| GET    | `/metrics`         | Prometheus metrics                               |
+
+Example prediction request:
+
+```bash
 curl -X POST http://localhost:8002/predict \
   -H "Content-Type: application/json" \
   -d '{
-        "student": {
-          "id_student": 12345,
-          "week_number": 6,
-          "clicks": 120,
-          "score": 65,
-          "missed_assessments": 1
-        }
-      }'
-
+    "student": {
+      "id_student": 12345,
+      "week_number": 6,
+      "clicks": 120,
+      "score": 65,
+      "missed_assessments": 1
+    }
+  }'
+  
 Airflow Pipeline
 The DAG student_weekly_pipeline runs weekly. It:
 
