@@ -52,12 +52,12 @@ This project was developed as part of the **DA5402 – Machine Learning Operatio
 ## Key Features
 
 -  **Automated weekly pipeline** – Airflow DAG ingests new data, validates schema, detects drift, and triggers retraining.
-- ✅ **Experiment tracking** – MLflow logs all hyperparameters, metrics, and artifacts. The best model is registered and aliased `@production`.
-- ✅ **Real‑time inference** – FastAPI serves predictions via REST endpoints with health/readiness probes.
-- ✅ **Interactive dashboard** – Streamlit provides five screens for individual risk assessment, cohort overview, pipeline console, and monitoring.
-- ✅ **Comprehensive monitoring** – Prometheus scrapes metrics (request count, latency, risk distribution, PSI score). Grafana displays live dashboards.
-- ✅ **Reproducible environments** – Conda environment and Docker images guarantee consistent behaviour across development and deployment.
-- ✅ **Extensive testing** – 22 unit tests with 88% code coverage.
+- **Experiment tracking** – MLflow logs all hyperparameters, metrics, and artifacts. The best model is registered and aliased `@production`.
+- **Real‑time inference** – FastAPI serves predictions via REST endpoints with health/readiness probes.
+- **Interactive dashboard** – Streamlit provides five screens for individual risk assessment, cohort overview, pipeline console, and monitoring.
+- **Comprehensive monitoring** – Prometheus scrapes metrics (request count, latency, risk distribution, PSI score). Grafana displays live dashboards.
+- **Reproducible environments** – Conda environment and Docker images guarantee consistent behaviour across development and deployment.
+- **Extensive testing** – 22 unit tests with 88% code coverage.
 
 ---
 
