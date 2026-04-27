@@ -90,6 +90,35 @@ def log_pipeline_metrics(**context):
         print("Metrics pushed to Pushgateway")
     except Exception as e:
         print(f"Failed to push metrics: {e}")
+def log_ground_truth(**context):
+    """Simulate end-of-semester ground truth feedback."""
+    import pandas as pd
+    import json
+    import os
+    from datetime import datetime
+
+    # Load student labels (contains final_result)
+    info = pd.read_csv('data/processed/student_labels.csv')
+
+    # Load latest pipeline metrics (if any)
+    if os.path.exists('data/processed/pipeline_metrics.json'):
+        with open('data/processed/pipeline_metrics.json', 'r') as f:
+            predictions = json.load(f)
+    else:
+        predictions = {}
+
+    # Simulate ground truth feedback
+    ground_truth = {
+        'timestamp': datetime.now().isoformat(),
+        'ground_truth_status': 'available',
+        'note': 'Ground truth labels (final_result) can be joined with prediction logs to compute real-world precision/recall.'
+    }
+
+    os.makedirs('data/processed', exist_ok=True)
+    with open('data/processed/ground_truth_feedback.json', 'w') as f:
+        json.dump(ground_truth, f, indent=2)
+
+    print("Ground truth feedback recorded.")
 
 with DAG(
     'student_weekly_pipeline',
@@ -107,7 +136,11 @@ with DAG(
     t5 = BranchPythonOperator(task_id='should_retrain', python_callable=should_retrain)
     t6 = PythonOperator(task_id='trigger_retraining', python_callable=trigger_retraining)
     t7 = EmptyOperator(task_id='skip_retraining')
-    t8 = PythonOperator(task_id='log_pipeline_metrics', python_callable=log_pipeline_metrics,
+    t8 = PythonOperator(task_id='log_pipeline_metrics',
+                        python_callable=log_pipeline_metrics,
                         trigger_rule='none_failed_min_one_success')
 
-    t1 >> t2 >> t3 >> t4 >> t5 >> [t6, t7] >> t8
+    t9 = PythonOperator(task_id='log_ground_truth',
+                        python_callable=log_ground_truth)
+
+    t1 >> t2 >> t3 >> t4 >> t5 >> [t6, t7] >> t8 >> t9

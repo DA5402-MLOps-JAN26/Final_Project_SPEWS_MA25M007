@@ -7,6 +7,8 @@ from typing import Dict, Any, List, Optional
 import os
 import joblib
 from monitoring.exporter import MODEL_F1
+import logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
 FEATURE_COLS = [
     'weekly_clicks_current', 'cumulative_clicks', 'weeks_since_active', 'click_trend_slope',
@@ -33,7 +35,7 @@ class Predictor:
             self.model = joblib.load(pickle_path)
             self.model_version = "docker-bundled"
             self.model_run_id = "bundled"
-            print("Loaded bundled model from pickle")
+            logging.info("Loaded bundled model from pickle")
             self._update_model_f1_metric(tracking_uri, model_name, alias)
             return
 
